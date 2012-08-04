@@ -1,3 +1,15 @@
 [submodule "plugins/haskell-mode"]
 	path = plugins/haskell-mode
 	url = https://github.com/haskell/haskell-mode.git
+[submodule "plugins/rainbow-mode"]
+	path = plugins/rainbow-mode
+	url = https://github.com/emacsmirror/rainbow-mode
+[submodule "plugins/nyan-mode"]
+	path = plugins/nyan-mode
+	url = https://github.com/TeMPOraL/nyan-mode/
+[submodule "plugins/rainbow-delimiters"]
+	path = plugins/rainbow-delimiters
+	url = https://github.com/jlr/rainbow-delimiters.git
+[submodule "plugins/mustache"]
+	path = plugins/mustache
+	url = https://github.com/mustache/emacs.git
