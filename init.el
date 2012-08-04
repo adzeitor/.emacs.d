@@ -41,8 +41,8 @@
 
 (require 'color-theme)
 (color-theme-initialize)
-(require 'twilight-theme)
-
+(require 'color-theme-twilight)
+(color-theme-twilight)
 
 (require 'whitespace)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
