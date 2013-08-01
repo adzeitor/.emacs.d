@@ -13,6 +13,6 @@
 [submodule "plugins/mustache"]
 	path = plugins/mustache
 	url = https://github.com/mustache/emacs.git
-[submodule "plugins/twilight-emacs"]
-	path = plugins/twilight-emacs
+[submodule "themes/twilight-emacs"]
+	path = themes/twilight-emacs
 	url = https://github.com/crafterm/twilight-emacs.git
