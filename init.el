@@ -1,15 +1,8 @@
 (let ((default-directory "~/.emacs.d/plugins"))
   (normal-top-level-add-subdirs-to-load-path))
+(let ((default-directory "~/.emacs.d/themes"))
+  (normal-top-level-add-subdirs-to-load-path))
 
-;(setenv "ERGOEMACS_KEYBOARD_LAYOUT" "workman") ; (Ergonomic) Colemak http://colemak.com/
-;(load-file "~/.emacs.d/ergoemacs-keybindings-5.3.9/ergoemacs-layout-workman.el")
-;(load-file "~/.emacs.d/ergoemacs-keybindings-5.3.9/ergoemacs-mode.el")
-
-;(ergoemacs-mode 1)
-
-(setq calendar-latitude +51.1200)
-(setq calendar-longitude 58.3700)
-(setq calendar-location-name "Orsk, Russia")
 
 (setq inhibit-splash-screen t)
 
@@ -50,12 +43,9 @@
 (setq visible-bell t)
 
 
-(add-to-list 'load-path "~/.emacs.d/themes/solarized-emacs/")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/solarized-emacs/")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/solarized-emacs/")
-;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-emacs/")
 
-;;(load-file "~/.emacs.d/themes/solarized-emacs/solarized-light-theme.el")
+
+
 
 (require 'whitespace)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
@@ -66,19 +56,17 @@
 
 
 
-(if (window-system)
-    ;;(set-face-attribute 'default nil :font "Monofur-18")
-    ;;(set-face-attribute 'default nil :font "Terminus-18")
-    ;;(set-face-attribute 'default nil :font "Inconsolata-18")
-    ;;(set-face-attribute 'default nil :font "Monospace-18")
-    ;;(set-face-attribute 'default nil :font "Envy Code R-16")
-    ;;(set-face-attribute 'default nil :font "Ubuntu Mono-14")
-    ;;(set-face-attribute 'default nil :font "Upheaval Pro")
-    ;;(set-face-attribute 'default nil :font "Anonymous Pro-16")
-    ;;(set-face-attribute 'default nil :font "Unifont-12")
-    (set-face-attribute 'default nil :font "PragmataPro-14")
+(require 'cl)
+(defun font-candidate (&rest fonts)
+  "Return existing font which first match."
+  (find-if (lambda (f) (find-font (font-spec :name f))) fonts))
 
-)
+(set-face-attribute 'default nil :font (font-candidate '
+                                        "PragmataPro-14"
+                                        "Ubuntu Mono-14"
+                                        "Consolas-10:weight=normal"
+                                        "DejaVu Sans Mono-10:weight=normal"))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; nyan-mode
@@ -89,19 +77,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;(require 'hpaste)
+;; thanks to da4c30ff
+;; http://stackoverflow.com/questions/9688748/emacs-comment-uncomment-current-line
+(defun comment-or-uncomment-region-or-line ()
+    "Comments or uncomments the region or the current line if there's no active region."
+    (interactive)
+    (let (beg end)
+        (if (region-active-p)
+            (setq beg (region-beginning) end (region-end))
+            (setq beg (line-beginning-position) end (line-end-position)))
+        (comment-or-uncomment-region beg end)))
 
-;(require 'autopair)
-;(autopair-global-mode 1)
-;(setq autopair-blink nil)
-
-
-(global-set-key "" (quote comment-or-uncomment-region))
+(global-set-key "" (quote comment-or-uncomment-region-or-line))
 
 
 
-;(require 'rainbow-mode)
-;(rainbow-mode)
 
 (require 'rainbow-delimiters)
 (global-rainbow-delimiters-mode 1)
@@ -110,23 +100,24 @@
 (require 'mustache-mode)
 
 
-(add-to-list 'load-path "~/.emacs.d/plugins/haskell-mode/")
-(require 'haskell-mode-autoloads)
+;;;;;;;;;;;; HASKELL ;;;;;;;;;;;;;;;;;
+
+
 (add-to-list 'Info-default-directory-list "~/.emacs.d/plugins/haskell-mode/")
+
+(require 'haskell-mode-autoloads)
+
 
 (require 'haskell-mode)
 ;; (load "haskell-site-file")
 (add-hook 'haskell-mode-hook 'haskell-hook)
-;;(add-hook 'haskell-mode-hook 'hexcolour-add-to-font-lock)
 
-(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 (setq haskell-font-lock-symbols 't)
 
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(define-key haskell-mode-map [f5] 'haskell-process-load-file)
+(define-key haskell-mode-map [f5] 'inferior-haskell-load-file)
 
 (add-hook 'haskell-mode-hook
                (lambda ()
@@ -134,16 +125,13 @@
                  '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
 
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(flymake-errline ((((class color)) (:underline "red"))))
- '(flymake-warnline ((((class color)) (:underline "yellow"))))
- '(my-long-line-face ((((class color)) (:background "gray10"))) t)
- '(my-tab-face ((((class color)) (:background "gray10"))) t)
- '(my-trailing-space-face ((((class color)) (:background "gray10"))) t))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;(add-to-list 'load-path "~/.emacs.d/themes/twilight-theme/")
+;;(add-to-list 'load-path "~/.emacs.d/themes/solarized-emacs/")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/solarized-emacs/")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/twilight-theme/")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -153,5 +141,18 @@
  '(custom-safe-themes
    (quote
     ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+;; make the fringe stand out from the background
+(setq solarized-distinct-fringe-background t)
+
+;; make the modeline high contrast
+(setq solarized-high-contrast-mode-line t)
 
 (load-theme 'solarized-light)

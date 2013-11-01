@@ -1,6 +1,7 @@
 [submodule "plugins/haskell-mode"]
 	path = plugins/haskell-mode
 	url = https://github.com/haskell/haskell-mode.git
+        branch = master
 [submodule "plugins/rainbow-mode"]
 	path = plugins/rainbow-mode
 	url = https://github.com/emacsmirror/rainbow-mode
@@ -16,3 +17,6 @@
 [submodule "themes/twilight-emacs"]
 	path = themes/twilight-emacs
 	url = https://github.com/crafterm/twilight-emacs.git
+[submodule "themes/solarized-emacs"]
+	path = themes/solarized-emacs
+	url = https://github.com/bbatsov/solarized-emacs.git
